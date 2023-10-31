@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import { Kafka } from 'kafkajs';
+import crypto from 'crypto';
 
 const kafka = new Kafka({
     clientId: 'comment-service',
-    brokers: ['broker-1'],
+    brokers: ['localhost:29092'],
 });
 
 const producer = kafka.producer();
@@ -21,10 +22,15 @@ let comments = [
     // comments...
 ]
 
-app.get('/:threadId', (req, res) => {
-    const {threadId} = req.params;
-    res.json(comments.filter(e => e.threadId === threadId));
+app.get('/', (req, res) => {
+    res.send(":: Comments Service is up and running.");
 });
+
+// app.get('/:threadId', (req, res) => {
+//     const {threadId} = req.params;
+//     console.log(threadId);
+//     res.json(comments.filter(e => e.threadId === threadId));
+// });
 
 // Post a comment.
 app.post('/:threadId', async (req, res) => {
@@ -64,6 +70,11 @@ app.delete('/:threadId/:commentId', (req, res) => {
         res.status(200).json(comments[idx]);
     }
 });
+
+app.get('*', (req, res) => {
+    res.status(404).send("404 Comment Service");
+    console.log(req.url);
+})
 
 const port = 3002;
 app.listen(port, () => {

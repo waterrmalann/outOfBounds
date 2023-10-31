@@ -6,7 +6,7 @@ import { Kafka } from 'kafkajs';
 
 const kafka = new Kafka({
     clientId: 'query-service',
-    brokers: ['broker-1'],
+    brokers: ['localhost:29092'],
 });
 
 const consumer = kafka.consumer({ groupId: 'query-service-group' });
@@ -62,7 +62,7 @@ app.get('/:threadId', (req, res) => {
     })
 });
 
-const port = 3005;
+const port = 3003;
 app.listen(port, () => {
     console.log(`[ SERVICE :: QUERY ] Query Service is listening on http://localhost:${port}`);
 });

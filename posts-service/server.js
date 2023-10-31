@@ -7,7 +7,7 @@ import { Kafka } from 'kafkajs';
 
 const kafka = new Kafka({
     clientId: 'thread-service',
-    brokers: process.env.BROKERS.split(','),
+    brokers: ['localhost:29092'],
 });
 
 const producer = kafka.producer();
@@ -64,22 +64,23 @@ app.delete('/:id', async (req, res) => {
 });
 
 
-// Retrieve threads
-app.get('/', (req, res) => {
-    const { skip, limit } = req.query;
-    console.log(`${limit} threads fetched.`)
-    res.json({ message: `${limit} threads fetched` })
-})
+// // Retrieve threads
+// app.get('/', (req, res) => {
+//     const { skip, limit } = req.query;
+//     console.log(`${limit} threads fetched.`)
+//     res.json({ message: `${limit} threads fetched` })
+// })
 
-app.get('/:id', (req, res) => {
-    const { id } = req.params;
-    const idx = threads.findIndex(e => e.id === id);
-    if (idx === -1) {
-        res.status(404).json({ message: "thread not found" })
-    } else {
-        res.status(200).json(threads[idx]);
-    }
-});
+// app.get('/:id', (req, res) => {
+//     const { id } = req.params;
+//     const idx = threads.findIndex(e => e.id === id);
+//     console.log(id);
+//     if (idx === -1) {
+//         res.status(404).json({ message: "thread not found" })
+//     } else {
+//         res.status(200).json(threads[idx]);
+//     }
+// });
 
 const port = 3001;
 app.listen(port, () => {
